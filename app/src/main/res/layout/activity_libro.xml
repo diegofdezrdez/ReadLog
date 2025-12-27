@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvTituloHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Añadir Nuevo Libro"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Título:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/libro_titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:background="#F0F0F0"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Autor:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/libro_autor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:background="#F0F0F0"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <CheckBox
+        android:id="@+id/cbLeido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leído"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/layoutPaginas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Número de página:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/etPaginaActual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="0"
+            android:background="#F0F0F0"
+            android:padding="12dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/libro_descripcion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Escribe un breve comentario..."
+        android:gravity="top|start"
+        android:inputType="textMultiLine"
+        android:background="#F0F0F0"
+        android:padding="12dp"
+        android:layout_marginBottom="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnVolver"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="VOLVER"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:backgroundTint="#CCCCCC"
+            android:layout_marginEnd="5dp"/>
+
+        <Button
+            android:id="@+id/btnEliminar"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="BORRAR"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="#D32F2F"
+            android:visibility="gone"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"/>
+
+        <Button
+            android:id="@+id/libro_guardar"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="GUARDAR"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="@color/black"
+            android:layout_marginStart="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ReadLog</string>
+
+    <string name="titulo_bienvenida">Bienvenido a ReadLog</string>
 </resources>
