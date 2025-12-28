@@ -11,9 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ReadLog">
+
         <activity
             android:name=".LibroActivity"
             android:exported="false" />
+
+        <activity android:name=".EstadisticasActivity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

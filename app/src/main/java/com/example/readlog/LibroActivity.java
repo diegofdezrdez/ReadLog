@@ -12,15 +12,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog; // Necesario para la ventanita de confirmación
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LibroActivity extends AppCompatActivity {
 
-    private EditText etNombre, etAutor, etDescripcion, etPaginaActual;
+    private EditText etNombre, etAutor, etNotas, etPaginaActual, etPaginasTotales;
     private CheckBox cbLeido;
-    private LinearLayout layoutPaginas;
-    private Button btnGuardar, btnVolver, btnEliminar; // <--- Nuevo botón
+    private LinearLayout containerPagActual; // Nuevo vínculo
+    private Button btnGuardar, btnVolver, btnEliminar;
     private TextView tvTitulo;
     private int libroId = -1;
 
@@ -32,25 +32,29 @@ public class LibroActivity extends AppCompatActivity {
         // --- VINCULACIÓN ---
         etNombre = findViewById(R.id.libro_titulo);
         etAutor = findViewById(R.id.libro_autor);
-        etDescripcion = findViewById(R.id.libro_descripcion);
+        etNotas = findViewById(R.id.libro_descripcion);
         cbLeido = findViewById(R.id.cbLeido);
         etPaginaActual = findViewById(R.id.etPaginaActual);
-        layoutPaginas = findViewById(R.id.layoutPaginas);
+        etPaginasTotales = findViewById(R.id.etPaginasTotales);
+
+        // Ahora vinculamos el contenedor específico de la página actual
+        containerPagActual = findViewById(R.id.containerPagActual);
 
         btnGuardar = findViewById(R.id.libro_guardar);
         btnVolver = findViewById(R.id.btnVolver);
-        btnEliminar = findViewById(R.id.btnEliminar); // <--- Vinculamos el botón rojo
+        btnEliminar = findViewById(R.id.btnEliminar);
 
         tvTitulo = findViewById(R.id.tvTituloHeader);
 
-        // --- LÓGICA VISUAL (Páginas) ---
+        // --- LÓGICA VISUAL ---
+        // Si está leído, ocultamos "Página Actual" pero dejamos "Páginas Totales"
         cbLeido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    layoutPaginas.setVisibility(View.GONE);
+                    containerPagActual.setVisibility(View.GONE);
                 } else {
-                    layoutPaginas.setVisibility(View.VISIBLE);
+                    containerPagActual.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -61,20 +65,26 @@ public class LibroActivity extends AppCompatActivity {
             libroId = extras.getInt("id");
             etNombre.setText(extras.getString("titulo"));
             etAutor.setText(extras.getString("autor"));
-            etDescripcion.setText(extras.getString("desc"));
+            etNotas.setText(extras.getString("notas"));
 
             int leido = extras.getInt("leido", 0);
-            int paginas = extras.getInt("paginas", 0);
+            int pagActual = extras.getInt("pag_actual", 0);
+            int pagTotales = extras.getInt("pag_totales", 0);
 
+            // IMPORTANTE: Primero cargamos los datos y luego marcamos el CheckBox
+            // para que el Listener actúe sobre la visibilidad correctamente.
+
+            // Cargamos siempre las totales
+            etPaginasTotales.setText(String.valueOf(pagTotales));
+
+            // Cargamos la actual solo si procede (aunque se ocultará si activamos leido)
+            etPaginaActual.setText(String.valueOf(pagActual));
+
+            // Esto disparará el Listener y ajustará la visibilidad de containerPagActual
             cbLeido.setChecked(leido == 1);
-            if (leido == 0) {
-                etPaginaActual.setText(String.valueOf(paginas));
-            }
 
             if(tvTitulo != null) tvTitulo.setText("Editar Libro");
             btnGuardar.setText("ACTUALIZAR");
-
-            // ¡IMPORTANTE! Como estamos editando, hacemos visible el botón de borrar
             btnEliminar.setVisibility(View.VISIBLE);
         }
 
@@ -93,7 +103,6 @@ public class LibroActivity extends AppCompatActivity {
             }
         });
 
-        // --- BOTÓN ELIMINAR CON CONFIRMACIÓN ---
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,39 +111,49 @@ public class LibroActivity extends AppCompatActivity {
         });
     }
 
-    // Método para mostrar la ventanita de "¿Estás seguro?"
     private void confirmarBorrado() {
         new AlertDialog.Builder(this)
                 .setTitle("Eliminar Libro")
                 .setMessage("¿Estás seguro de que quieres borrar este libro? No podrás recuperarlo.")
                 .setPositiveButton("SÍ, BORRAR", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Si dice que SÍ, borramos
                         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(LibroActivity.this);
                         admin.eliminarLibro(libroId);
-
                         Toast.makeText(LibroActivity.this, "Libro eliminado", Toast.LENGTH_SHORT).show();
-                        finish(); // Cerramos la pantalla
+                        finish();
                     }
                 })
-                .setNegativeButton("CANCELAR", null) // Si dice que NO, no hacemos nada
+                .setNegativeButton("CANCELAR", null)
                 .show();
     }
 
     private void guardarCambios() {
         String titulo = etNombre.getText().toString();
         String autor = etAutor.getText().toString();
-        String descripcion = etDescripcion.getText().toString();
+        String notas = etNotas.getText().toString();
 
         boolean isLeido = cbLeido.isChecked();
         int valorLeido = isLeido ? 1 : 0;
 
-        int paginaActual = 0;
+        int pagActual = 0;
+        int pagTotales = 0;
+
+        // 1. Siempre leemos las páginas totales (si el usuario puso algo)
+        String pagTotalesStr = etPaginasTotales.getText().toString();
+        if (!pagTotalesStr.isEmpty()) {
+            pagTotales = Integer.parseInt(pagTotalesStr);
+        }
+
+        // 2. Leemos la página actual solo si NO es leído
         if (!isLeido) {
-            String paginaStr = etPaginaActual.getText().toString();
-            if (!paginaStr.isEmpty()) {
-                paginaActual = Integer.parseInt(paginaStr);
+            String pagActualStr = etPaginaActual.getText().toString();
+            if (!pagActualStr.isEmpty()) {
+                pagActual = Integer.parseInt(pagActualStr);
             }
+        } else {
+            // (Opcional) Si es leído, asignamos la actual a totales por coherencia interna,
+            // aunque visualmente en la lista saldrá "LEÍDO".
+            pagActual = pagTotales;
         }
 
         if (titulo.isEmpty() || autor.isEmpty()) {
@@ -148,15 +167,16 @@ public class LibroActivity extends AppCompatActivity {
         ContentValues registro = new ContentValues();
         registro.put("titulo", titulo);
         registro.put("autor", autor);
-        registro.put("descripcion", descripcion);
+        registro.put("notas", notas);
         registro.put("leido", valorLeido);
-        registro.put("pagina_actual", paginaActual);
+        registro.put("pagina_actual", pagActual);
+        registro.put("paginas_totales", pagTotales);
 
         if (libroId == -1) {
             db.insert("libros", null, registro);
             Toast.makeText(this, "Libro guardado", Toast.LENGTH_SHORT).show();
         } else {
-            admin.actualizarLibro(libroId, titulo, autor, descripcion, valorLeido, paginaActual);
+            admin.actualizarLibro(libroId, titulo, autor, notas, valorLeido, pagActual, pagTotales);
             Toast.makeText(this, "Libro actualizado", Toast.LENGTH_SHORT).show();
         }
 

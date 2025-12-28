@@ -2,6 +2,7 @@ package com.example.readlog;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -10,17 +11,17 @@ import androidx.annotation.Nullable;
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "libros_db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
-    // AÑADIDOS: leido (INTEGER 1/0) y pagina_actual (INTEGER)
     private static final String TABLE_CREATE =
             "CREATE TABLE libros (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "titulo TEXT, " +
                     "autor TEXT, " +
-                    "descripcion TEXT, " +
+                    "notas TEXT, " +
                     "leido INTEGER, " +
-                    "pagina_actual INTEGER)";
+                    "pagina_actual INTEGER, " +
+                    "paginas_totales INTEGER)";
 
     public AdminSQLiteOpenHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,15 +38,16 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void actualizarLibro(int id, String titulo, String autor, String descripcion, int leido, int paginaActual) {
+    public void actualizarLibro(int id, String titulo, String autor, String notas, int leido, int paginaActual, int paginasTotales) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues registro = new ContentValues();
 
         registro.put("titulo", titulo);
         registro.put("autor", autor);
-        registro.put("descripcion", descripcion);
+        registro.put("notas", notas);
         registro.put("leido", leido);
         registro.put("pagina_actual", paginaActual);
+        registro.put("paginas_totales", paginasTotales);
 
         db.update("libros", registro, "id=?", new String[]{String.valueOf(id)});
         db.close();
@@ -53,8 +55,41 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public void eliminarLibro(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        // "DELETE FROM libros WHERE id = (el numero)"
         db.delete("libros", "id=?", new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    // --- NUEVO MÉTODO PARA LAS ESTADÍSTICAS ---
+    // Devuelve un array de 3 enteros: [Total Libros, Total Leídos, Total Páginas Leídas]
+    public int[] obtenerEstadisticas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int[] resultados = new int[3]; // Pos 0: Total, Pos 1: Leídos, Pos 2: Páginas
+
+        // 1. Contar total de libros
+        Cursor cTotal = db.rawQuery("SELECT count(*) FROM libros", null);
+        if (cTotal.moveToFirst()) {
+            resultados[0] = cTotal.getInt(0);
+        }
+        cTotal.close();
+
+        // 2. Contar libros leídos
+        Cursor cLeidos = db.rawQuery("SELECT count(*) FROM libros WHERE leido=1", null);
+        if (cLeidos.moveToFirst()) {
+            resultados[1] = cLeidos.getInt(0);
+        }
+        cLeidos.close();
+
+        // 3. Calcular páginas leídas totales
+        // Suma 'paginas_totales' si el libro está leído, o 'pagina_actual' si no lo está.
+        // COALESCE es para que si devuelve null (sin libros), devuelva 0.
+        String sqlPaginas = "SELECT COALESCE(SUM(CASE WHEN leido = 1 THEN paginas_totales ELSE pagina_actual END), 0) FROM libros";
+        Cursor cPaginas = db.rawQuery(sqlPaginas, null);
+        if (cPaginas.moveToFirst()) {
+            resultados[2] = cPaginas.getInt(0);
+        }
+        cPaginas.close();
+
+        db.close();
+        return resultados;
     }
 }
