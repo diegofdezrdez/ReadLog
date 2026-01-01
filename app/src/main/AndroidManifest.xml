@@ -16,7 +16,17 @@
             android:name=".LibroActivity"
             android:exported="false" />
 
-        <activity android:name=".EstadisticasActivity" />
+        <activity 
+            android:name=".EstadisticasActivity"
+            android:exported="false" />
+
+        <activity 
+            android:name=".ConfiguracionActivity"
+            android:exported="false" />
+
+        <activity 
+            android:name=".CalendarioActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

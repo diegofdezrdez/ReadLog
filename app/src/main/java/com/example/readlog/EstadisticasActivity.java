@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class EstadisticasActivity extends AppCompatActivity {
+public class EstadisticasActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

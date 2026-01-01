@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "libros_db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String TABLE_CREATE =
             "CREATE TABLE libros (" +
@@ -21,7 +21,10 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                     "notas TEXT, " +
                     "leido INTEGER, " +
                     "pagina_actual INTEGER, " +
-                    "paginas_totales INTEGER)";
+                    "paginas_totales INTEGER, " +
+                    "favorito INTEGER DEFAULT 0, " +
+                    "estado TEXT DEFAULT 'pendiente', " +
+                    "fecha_actualizacion INTEGER)";
 
     public AdminSQLiteOpenHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,11 +37,18 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS libros");
-        onCreate(db);
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE libros ADD COLUMN favorito INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE libros ADD COLUMN estado TEXT DEFAULT 'pendiente'");
+            db.execSQL("ALTER TABLE libros ADD COLUMN fecha_actualizacion INTEGER");
+            // Actualizar estados basados en datos existentes
+            db.execSQL("UPDATE libros SET estado = 'leido' WHERE leido = 1");
+            db.execSQL("UPDATE libros SET estado = 'en_progreso' WHERE leido = 0 AND pagina_actual > 0");
+            db.execSQL("UPDATE libros SET estado = 'pendiente' WHERE leido = 0 AND pagina_actual = 0");
+        }
     }
 
-    public void actualizarLibro(int id, String titulo, String autor, String notas, int leido, int paginaActual, int paginasTotales) {
+    public void actualizarLibro(int id, String titulo, String autor, String notas, int leido, int paginaActual, int paginasTotales, int favorito, String estado) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues registro = new ContentValues();
 
@@ -48,6 +58,9 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         registro.put("leido", leido);
         registro.put("pagina_actual", paginaActual);
         registro.put("paginas_totales", paginasTotales);
+        registro.put("favorito", favorito);
+        registro.put("estado", estado);
+        registro.put("fecha_actualizacion", System.currentTimeMillis());
 
         db.update("libros", registro, "id=?", new String[]{String.valueOf(id)});
         db.close();
