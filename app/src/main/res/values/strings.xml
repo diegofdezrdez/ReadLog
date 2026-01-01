@@ -1,5 +1,89 @@
 <resources>
     <string name="app_name">ReadLog</string>
-
-    <string name="titulo_bienvenida">Bienvenido a ReadLog</string>
+    
+    <!-- MainActivity -->
+    <string name="main_title">ReadLog</string>
+    <string name="search_hint">Buscar libro o autor…</string>
+    <string name="btn_add_book">+ AÑADIR LIBRO</string>
+    <string name="no_books_found">No se encontraron libros.</string>
+    <string name="config_desc">Configuración</string>
+    <string name="calendar_desc">Calendario</string>
+    <string name="stats_desc">Estadísticas</string>
+    
+    <!-- LibroActivity -->
+    <string name="title_add_book">Añadir Nuevo Libro</string>
+    <string name="title_edit_book">Editar Libro</string>
+    <string name="label_title">Título:</string>
+    <string name="label_author">Autor:</string>
+    <string name="label_notes">Notas:</string>
+    <string name="label_status">Estado:</string>
+    <string name="label_current_page">Pág. Actual:</string>
+    <string name="label_total_pages">Pág. Totales:</string>
+    <string name="hint_notes">Escribe tus notas…</string>
+    <string name="hint_page">0</string>
+    <string name="cb_read">Leído</string>
+    <string name="cb_favorite">⭐ Favorito</string>
+    <string name="rb_pending">Pendiente</string>
+    <string name="rb_in_progress">En Progreso</string>
+    <string name="rb_read">Leído</string>
+    <string name="btn_save">GUARDAR</string>
+    <string name="btn_update">ACTUALIZAR</string>
+    <string name="btn_delete">BORRAR</string>
+    <string name="btn_back">VOLVER</string>
+    
+    <!-- Mensajes LibroActivity -->
+    <string name="msg_book_saved">Libro guardado</string>
+    <string name="msg_book_updated">Libro actualizado</string>
+    <string name="msg_book_deleted">Libro eliminado</string>
+    <string name="msg_fill_required">Rellena título y autor</string>
+    <string name="dialog_delete_title">Eliminar Libro</string>
+    <string name="dialog_delete_message">¿Estás seguro de que quieres borrar este libro? No podrás recuperarlo.</string>
+    <string name="dialog_yes_delete">SÍ, BORRAR</string>
+    <string name="dialog_cancel">CANCELAR</string>
+    
+    <!-- Estados del libro -->
+    <string name="status_read">LEÍDO</string>
+    <string name="status_in_progress">En Progreso (%1$d%%)</string>
+    <string name="status_pending">Pendiente</string>
+    
+    <!-- EstadisticasActivity -->
+    <string name="stats_title">Mis Estadísticas</string>
+    <string name="btn_back_stats">VOLVER</string>
+    <string name="stats_total_books">Total Libros</string>
+    <string name="stats_read">Leídos</string>
+    <string name="stats_pending">Pendientes</string>
+    <string name="stats_pages_read">Páginas Leídas (Total)</string>
+    
+    <!-- CalendarioActivity -->
+    <string name="calendar_title">Calendario de Actividad</string>
+    <string name="calendar_description">Los días en verde indican actividad (libros guardados o actualizados)</string>
+    
+    <!-- Días de la semana -->
+    <string name="day_sun">Dom</string>
+    <string name="day_mon">Lun</string>
+    <string name="day_tue">Mar</string>
+    <string name="day_wed">Mié</string>
+    <string name="day_thu">Jue</string>
+    <string name="day_fri">Vie</string>
+    <string name="day_sat">Sáb</string>
+    
+    <!-- ConfiguracionActivity -->
+    <string name="config_title">Configuración</string>
+    <string name="config_theme_label">Tema de la aplicación:</string>
+    <string name="config_theme_light">Tema Claro</string>
+    <string name="config_theme_dark">Tema Oscuro</string>
+    <string name="config_theme_auto">Automático (según sistema)</string>
+    <string name="config_font_size_label">Tamaño de letra:</string>
+    <string name="config_font_small">Pequeño</string>
+    <string name="config_font_normal">Normal</string>
+    <string name="config_font_large">Grande</string>
+    <string name="config_language_label">Idioma de la aplicación:</string>
+    <string name="config_language_spanish">Español</string>
+    <string name="config_language_english">English</string>
+    <string name="config_saved">Configuración guardada</string>
+    <string name="btn_back_config">VOLVER</string>
+    <string name="btn_save_config">GUARDAR</string>
+    
+    <!-- CalendarioActivity -->
+    <string name="btn_back_calendar">VOLVER</string>
 </resources>

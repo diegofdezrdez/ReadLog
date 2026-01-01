@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="?android:attr/colorBackground"
     android:padding="24dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mis Estadísticas"
+        android:text="@string/stats_title"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Libros"
+            android:text="@string/stats_total_books"
             android:textSize="14sp"
             android:textColor="@color/text_secondary"
             android:textStyle="bold"
@@ -55,16 +55,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="#E8F5E9"
+            android:background="@color/stats_read_bg"
             android:padding="20dp"
             android:layout_marginEnd="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leídos"
+                android:text="@string/stats_read"
                 android:textSize="14sp"
-                android:textColor="#2E7D32"
+                android:textColor="@color/stats_read_text"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp"/>
 
@@ -75,7 +75,7 @@
                 android:text="0"
                 android:textSize="32sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32"/>
+                android:textColor="@color/stats_read_text"/>
         </LinearLayout>
 
         <LinearLayout
@@ -83,16 +83,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="#FFF3E0"
+            android:background="@color/stats_pending_bg"
             android:padding="20dp"
             android:layout_marginStart="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pendientes"
+                android:text="@string/stats_pending"
                 android:textSize="14sp"
-                android:textColor="#EF6C00"
+                android:textColor="@color/stats_pending_text"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp"/>
 
@@ -103,7 +103,7 @@
                 android:text="0"
                 android:textSize="32sp"
                 android:textStyle="bold"
-                android:textColor="#EF6C00"/>
+                android:textColor="@color/stats_pending_text"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -111,16 +111,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#E3F2FD"
+        android:background="@color/stats_pages_bg"
         android:padding="20dp"
         android:layout_marginBottom="30dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Páginas Leídas (Total)"
+            android:text="@string/stats_pages_read"
             android:textSize="14sp"
-            android:textColor="#1565C0"
+            android:textColor="@color/stats_pages_text"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
 
@@ -131,14 +131,14 @@
             android:text="0"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="#1565C0"/>
+            android:textColor="@color/stats_pages_text"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/btnCerrarStats"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="VOLVER"
+        android:text="@string/btn_back_stats"
         android:textColor="@color/text_primary"
         android:textStyle="bold"
         android:backgroundTint="@color/button_secondary"/>

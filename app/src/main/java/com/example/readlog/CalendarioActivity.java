@@ -105,7 +105,11 @@ public class CalendarioActivity extends BaseActivity {
         int diasEnMes = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         // Encabezados de días de la semana
-        String[] diasSemana = {"Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"};
+        String[] diasSemana = {
+            getString(R.string.day_sun), getString(R.string.day_mon), getString(R.string.day_tue),
+            getString(R.string.day_wed), getString(R.string.day_thu), getString(R.string.day_fri),
+            getString(R.string.day_sat)
+        };
         for (String dia : diasSemana) {
             TextView tv = new TextView(this);
             tv.setText(dia);

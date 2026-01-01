@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,8 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import android.widget.Toast;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends BaseActivity {
 
@@ -67,6 +66,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LibroActivity.class);
                 startActivity(intent);
+                Toast.makeText(MainActivity.this, R.string.title_add_book, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -136,21 +136,21 @@ public class MainActivity extends BaseActivity {
 
                 // Mostrar estado según el campo estado
                 if (estado != null && estado.equals("leido")) {
-                    tvEstado.setText("LEÍDO");
-                    tvEstado.setTextColor(Color.parseColor("#2E7D32"));
-                    tvEstado.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                    tvEstado.setText(R.string.status_read);
+                    tvEstado.setTextColor(getResources().getColor(R.color.stats_read_text, null));
+                    tvEstado.setBackgroundColor(getResources().getColor(R.color.stats_read_bg, null));
                 } else if (estado != null && estado.equals("en_progreso")) {
                     int porcentaje = 0;
                     if (pagTotales > 0 && pagActual > 0) {
                         porcentaje = (pagActual * 100) / pagTotales;
                     }
-                    tvEstado.setText("En Progreso (" + porcentaje + "%)");
-                    tvEstado.setTextColor(Color.parseColor("#1565C0"));
-                    tvEstado.setBackgroundColor(Color.parseColor("#BBDEFB"));
+                    tvEstado.setText(getString(R.string.status_in_progress, porcentaje));
+                    tvEstado.setTextColor(getResources().getColor(R.color.stats_pages_text, null));
+                    tvEstado.setBackgroundColor(getResources().getColor(R.color.stats_pages_bg, null));
                 } else {
-                    tvEstado.setText("Pendiente");
-                    tvEstado.setTextColor(Color.parseColor("#F57C00"));
-                    tvEstado.setBackgroundColor(Color.parseColor("#FFE0B2"));
+                    tvEstado.setText(R.string.status_pending);
+                    tvEstado.setTextColor(getResources().getColor(R.color.stats_pending_text, null));
+                    tvEstado.setBackgroundColor(getResources().getColor(R.color.stats_pending_bg, null));
                 }
 
                 bloqueLibro.setOnClickListener(new View.OnClickListener() {
@@ -176,12 +176,17 @@ public class MainActivity extends BaseActivity {
 
         } else {
             TextView tvAviso = new TextView(this);
-            tvAviso.setText("No se encontraron libros.");
+            tvAviso.setText(R.string.no_books_found);
             tvAviso.setTextSize(16);
             tvAviso.setGravity(android.view.Gravity.CENTER);
-            tvAviso.setTextColor(Color.GRAY);
+            tvAviso.setTextColor(getResources().getColor(R.color.text_secondary, null));
             tvAviso.setPadding(0, 50, 0, 0);
             contenedorLibros.addView(tvAviso);
+            
+            // Toast informativo
+            if (!busqueda.isEmpty()) {
+                Toast.makeText(this, R.string.no_books_found, Toast.LENGTH_SHORT).show();
+            }
         }
 
         db.close();

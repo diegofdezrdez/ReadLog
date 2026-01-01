@@ -12,4 +12,18 @@
     <color name="text_secondary">#666666</color>
     <color name="button_primary">#000000</color>
     <color name="button_secondary">#CCCCCC</color>
+    
+    <!-- Colores para estadísticas modo claro -->
+    <color name="stats_read_bg">#E8F5E9</color>
+    <color name="stats_read_text">#2E7D32</color>
+    <color name="stats_pending_bg">#FFF3E0</color>
+    <color name="stats_pending_text">#EF6C00</color>
+    <color name="stats_pages_bg">#E3F2FD</color>
+    <color name="stats_pages_text">#1565C0</color>
+    
+    <!-- Color para botón eliminar -->
+    <color name="button_delete">#D32F2F</color>
+    
+    <!-- Fondo para campos de entrada -->
+    <color name="input_background">#F0F0F0</color>
 </resources>

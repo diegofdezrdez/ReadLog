@@ -16,6 +16,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Configuración de idiomas soportados
+        resourceConfigurations.addAll(listOf("es", "en"))
     }
 
     buildTypes {

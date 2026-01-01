@@ -10,7 +10,7 @@
         android:id="@+id/tvTituloHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Añadir Nuevo Libro"
+        android:text="@string/title_add_book"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Título:"
+        android:text="@string/label_title"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -31,14 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
-        android:background="#F0F0F0"
+        android:background="@color/input_background"
         android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Autor:"
+        android:text="@string/label_author"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:background="#F0F0F0"
+        android:background="@color/input_background"
         android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
@@ -57,7 +57,7 @@
         android:id="@+id/cbLeido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Leído"
+        android:text="@string/cb_read"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
@@ -66,7 +66,7 @@
         android:id="@+id/cbFavorito"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="⭐ Favorito"
+        android:text="@string/cb_favorite"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
@@ -74,7 +74,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Estado:"
+        android:text="@string/label_status"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -92,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Pendiente"
+            android:text="@string/rb_pending"
             android:textSize="14sp" />
 
         <RadioButton
@@ -100,7 +100,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="En Progreso"
+            android:text="@string/rb_in_progress"
             android:textSize="14sp" />
 
         <RadioButton
@@ -108,7 +108,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Leído"
+            android:text="@string/rb_read"
             android:textSize="14sp" />
     </RadioGroup>
 
@@ -131,7 +131,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pág. Actual:"
+                android:text="@string/label_current_page"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="0"
-                android:background="#F0F0F0"
+                android:background="@color/input_background"
                 android:padding="12dp"/>
         </LinearLayout>
 
@@ -157,7 +157,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pág. Totales:"
+                android:text="@string/label_total_pages"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="0"
-                android:background="#F0F0F0"
+                android:background="@color/input_background"
                 android:padding="12dp"/>
         </LinearLayout>
 
@@ -178,7 +178,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notas:"
+        android:text="@string/label_notes"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -189,10 +189,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Escribe tus notas..."
+        android:hint="@string/hint_notes"
         android:gravity="top|start"
         android:inputType="textMultiLine"
-        android:background="#F0F0F0"
+        android:background="@color/input_background"
         android:padding="12dp"
         android:layout_marginBottom="20dp"/>
 
@@ -207,7 +207,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="VOLVER"
+            android:text="@string/btn_back"
             android:textColor="@color/text_primary"
             android:textStyle="bold"
             android:backgroundTint="@color/button_secondary"
@@ -218,10 +218,10 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="BORRAR"
+            android:text="@string/btn_delete"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:backgroundTint="#D32F2F"
+            android:backgroundTint="@color/button_delete"
             android:visibility="gone"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"/>
@@ -231,7 +231,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="GUARDAR"
+            android:text="@string/btn_save"
             android:textColor="@color/surface_color"
             android:textStyle="bold"
             android:backgroundTint="@color/button_primary"

@@ -15,7 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LibroActivity extends BaseActivity {
 
@@ -109,9 +109,11 @@ public class LibroActivity extends BaseActivity {
                 rbPendiente.setChecked(true);
             }
 
-            if(tvTitulo != null) tvTitulo.setText("Editar Libro");
-            btnGuardar.setText("ACTUALIZAR");
+            if(tvTitulo != null) tvTitulo.setText(R.string.title_edit_book);
+            btnGuardar.setText(R.string.btn_update);
             btnEliminar.setVisibility(View.VISIBLE);
+            
+            Toast.makeText(this, getString(R.string.title_edit_book) + ": " + extras.getString("titulo"), Toast.LENGTH_SHORT).show();
         } else {
             // Modo nuevo libro - seleccionar pendiente por defecto
             rbPendiente.setChecked(true);
@@ -142,17 +144,17 @@ public class LibroActivity extends BaseActivity {
 
     private void confirmarBorrado() {
         new AlertDialog.Builder(this)
-                .setTitle("Eliminar Libro")
-                .setMessage("¿Estás seguro de que quieres borrar este libro? No podrás recuperarlo.")
-                .setPositiveButton("SÍ, BORRAR", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.dialog_delete_title)
+                .setMessage(R.string.dialog_delete_message)
+                .setPositiveButton(R.string.dialog_yes_delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(LibroActivity.this);
                         admin.eliminarLibro(libroId);
-                        Toast.makeText(LibroActivity.this, "Libro eliminado", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_deleted, Snackbar.LENGTH_LONG).show();
                         finish();
                     }
                 })
-                .setNegativeButton("CANCELAR", null)
+                .setNegativeButton(R.string.dialog_cancel, null)
                 .show();
     }
 
@@ -191,7 +193,7 @@ public class LibroActivity extends BaseActivity {
         }
 
         if (titulo.isEmpty() || autor.isEmpty()) {
-            Toast.makeText(this, "Rellena título y autor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_fill_required, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -211,10 +213,16 @@ public class LibroActivity extends BaseActivity {
 
         if (libroId == -1) {
             db.insert("libros", null, registro);
-            Toast.makeText(this, "Libro guardado", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_saved, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.btn_back, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    }).show();
         } else {
             admin.actualizarLibro(libroId, titulo, autor, notas, valorLeido, pagActual, pagTotales, valorFavorito, estado);
-            Toast.makeText(this, "Libro actualizado", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_updated, Snackbar.LENGTH_LONG).show();
         }
 
         db.close();

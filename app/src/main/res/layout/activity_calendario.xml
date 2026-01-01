@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calendario de Actividad"
+        android:text="@string/calendar_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Los días en verde indican actividad (libros guardados o actualizados)"
+        android:text="@string/calendar_description"
         android:textSize="12sp"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>

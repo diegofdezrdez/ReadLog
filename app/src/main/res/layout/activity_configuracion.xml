@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Configuración"
+        android:text="@string/config_title"
         android:textSize="26sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tema de la aplicación:"
+        android:text="@string/config_theme_label"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="12dp"/>
@@ -34,7 +34,7 @@
             android:id="@+id/rbTemaClaro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tema Claro"
+            android:text="@string/config_theme_light"
             android:textSize="16sp"
             android:padding="8dp"/>
 
@@ -42,7 +42,7 @@
             android:id="@+id/rbTemaOscuro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tema Oscuro"
+            android:text="@string/config_theme_dark"
             android:textSize="16sp"
             android:padding="8dp"/>
 
@@ -50,7 +50,7 @@
             android:id="@+id/rbTemaAuto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Automático (según sistema)"
+            android:text="@string/config_theme_auto"
             android:textSize="16sp"
             android:padding="8dp"/>
     </RadioGroup>
@@ -59,7 +59,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tamaño de letra:"
+        android:text="@string/config_font_size_label"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="12dp"/>
@@ -69,7 +69,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:background="#F0F0F0"
+        android:background="@color/input_background"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Idioma -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/config_language_label"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp"/>
+
+    <Spinner
+        android:id="@+id/spIdioma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@color/input_background"
         android:layout_marginBottom="32dp"/>
 
     <!-- Botones -->
@@ -84,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="VOLVER"
+            android:text="@string/btn_back_config"
             android:textStyle="bold"
             android:backgroundTint="@color/button_secondary"
             android:layout_marginEnd="8dp"/>
@@ -94,7 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="GUARDAR"
+            android:text="@string/btn_save_config"
             android:textColor="@color/surface_color"
             android:textStyle="bold"
             android:backgroundTint="@color/button_primary"

@@ -10,12 +10,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import com.google.android.material.snackbar.Snackbar;
 
 public class ConfiguracionActivity extends BaseActivity {
 
     private RadioGroup rgTema;
     private RadioButton rbTemaClaro, rbTemaOscuro, rbTemaAuto;
     private Spinner spTamanoLetra;
+    private Spinner spIdioma;
     private Button btnGuardar, btnVolver;
 
     @Override
@@ -29,15 +31,23 @@ public class ConfiguracionActivity extends BaseActivity {
         rbTemaOscuro = findViewById(R.id.rbTemaOscuro);
         rbTemaAuto = findViewById(R.id.rbTemaAuto);
         spTamanoLetra = findViewById(R.id.spTamanoLetra);
+        spIdioma = findViewById(R.id.spIdioma);
         btnGuardar = findViewById(R.id.btnGuardarConfig);
         btnVolver = findViewById(R.id.btnVolverConfig);
 
         // Configurar spinner de tamaño de letra
-        String[] tamanos = {"Pequeño", "Normal", "Grande"};
+        String[] tamanos = {getString(R.string.config_font_small), getString(R.string.config_font_normal), getString(R.string.config_font_large)};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, 
             android.R.layout.simple_spinner_item, tamanos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spTamanoLetra.setAdapter(adapter);
+
+        // Configurar spinner de idioma
+        String[] idiomas = {getString(R.string.config_language_spanish), getString(R.string.config_language_english)};
+        ArrayAdapter<String> adapterIdioma = new ArrayAdapter<>(this, 
+            android.R.layout.simple_spinner_item, idiomas);
+        adapterIdioma.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spIdioma.setAdapter(adapterIdioma);
 
         // Cargar configuración actual
         cargarConfiguracionActual();
@@ -73,10 +83,17 @@ public class ConfiguracionActivity extends BaseActivity {
         // Cargar tamaño de letra
         int tamanoLetra = prefs.getInt("tamano_letra", 1); // 0=pequeño, 1=normal, 2=grande
         spTamanoLetra.setSelection(tamanoLetra);
+
+        // Cargar idioma
+        String idioma = prefs.getString("idioma", "es"); // 0=español, 1=inglés
+        spIdioma.setSelection(idioma.equals("en") ? 1 : 0);
     }
 
     private void guardarConfiguracion() {
         SharedPreferences.Editor editor = prefs.edit();
+
+        // Guardar valores anteriores para comparar
+        String idiomaAnterior = prefs.getString("idioma", "es");
 
         // Guardar tema
         int temaSeleccionado;
@@ -93,14 +110,45 @@ public class ConfiguracionActivity extends BaseActivity {
         int tamanoLetra = spTamanoLetra.getSelectedItemPosition();
         editor.putInt("tamano_letra", tamanoLetra);
 
+        // Guardar idioma
+        String idiomaNuevo = spIdioma.getSelectedItemPosition() == 0 ? "es" : "en";
+        editor.putString("idioma", idiomaNuevo);
+
         editor.apply();
 
         // Aplicar cambios inmediatamente
         int temaSeleccionado2 = prefs.getInt("tema", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(temaSeleccionado2);
         
-        // Recrear actividad para aplicar cambios
-        recreate();
+        // Mostrar Snackbar de confirmación
+        Snackbar.make(findViewById(android.R.id.content), R.string.config_saved, Snackbar.LENGTH_LONG).show();
+        
+        // Si cambió el idioma, reiniciar toda la aplicación
+        if (!idiomaAnterior.equals(idiomaNuevo)) {
+            findViewById(android.R.id.content).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    reiniciarAplicacion();
+                }
+            }, 1000);
+        } else {
+            // Solo recrear esta actividad si no cambió el idioma
+            findViewById(android.R.id.content).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recreate();
+                }
+            }, 1000);
+        }
+    }
+
+    private void reiniciarAplicacion() {
+        android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+        // Forzar recreación de la actividad con el nuevo idioma
+        Runtime.getRuntime().exit(0);
     }
 
     public static float obtenerTamanoLetra(SharedPreferences prefs) {

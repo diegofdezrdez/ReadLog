@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReadLog</string>
+    
+    <!-- MainActivity -->
+    <string name="main_title">ReadLog</string>
+    <string name="search_hint">Search book or author…</string>
+    <string name="btn_add_book">+ ADD BOOK</string>
+    <string name="no_books_found">No books found.</string>
+    <string name="config_desc">Settings</string>
+    <string name="calendar_desc">Calendar</string>
+    <string name="stats_desc">Statistics</string>
+    
+    <!-- LibroActivity -->
+    <string name="title_add_book">Add New Book</string>
+    <string name="title_edit_book">Edit Book</string>
+    <string name="label_title">Title:</string>
+    <string name="label_author">Author:</string>
+    <string name="label_notes">Notes:</string>
+    <string name="label_status">Status:</string>
+    <string name="label_current_page">Current Page:</string>
+    <string name="label_total_pages">Total Pages:</string>
+    <string name="hint_notes">Write your notes…</string>
+    <string name="hint_page">0</string>
+    <string name="cb_read">Read</string>
+    <string name="cb_favorite">⭐ Favorite</string>
+    <string name="rb_pending">Pending</string>
+    <string name="rb_in_progress">In Progress</string>
+    <string name="rb_read">Read</string>
+    <string name="btn_save">SAVE</string>
+    <string name="btn_update">UPDATE</string>
+    <string name="btn_delete">DELETE</string>
+    <string name="btn_back">BACK</string>
+    
+    <!-- Mensajes LibroActivity -->
+    <string name="msg_book_saved">Book saved</string>
+    <string name="msg_book_updated">Book updated</string>
+    <string name="msg_book_deleted">Book deleted</string>
+    <string name="msg_fill_required">Fill in title and author</string>
+    <string name="dialog_delete_title">Delete Book</string>
+    <string name="dialog_delete_message">Are you sure you want to delete this book? You won\'t be able to recover it.</string>
+    <string name="dialog_yes_delete">YES, DELETE</string>
+    <string name="dialog_cancel">CANCEL</string>
+    
+    <!-- Estados del libro -->
+    <string name="status_read">READ</string>
+    <string name="status_in_progress">In Progress (%1$d%%)</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_page">Page %1$d (%2$d%%)</string>
+
+    <!-- EstadisticasActivity -->
+    <string name="stats_title">My Statistics</string>
+    <string name="btn_back_stats">BACK</string>
+    <string name="stats_total_books">Total Books</string>
+    <string name="stats_read">Read</string>
+    <string name="stats_pending">Pending</string>
+    <string name="stats_pages_read">Pages Read (Total)</string>
+    
+    <!-- CalendarioActivity -->
+    <string name="calendar_title">Activity Calendar</string>
+    <string name="calendar_description">Green days indicate activity (saved or updated books)</string>
+    <string name="calendar_month_year">%1$s %2$d</string>
+    <string name="btn_previous">‹</string>
+    <string name="btn_next">›</string>
+    
+    <!-- Días de la semana -->
+    <string name="day_sun">Sun</string>
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    
+    <!-- ConfiguracionActivity -->
+    <string name="config_title">Settings</string>
+    <string name="config_theme_label">App theme:</string>
+    <string name="config_theme_light">Light Theme</string>
+    <string name="config_theme_dark">Dark Theme</string>
+    <string name="config_theme_auto">Automatic (system default)</string>
+    <string name="config_font_size_label">Font size:</string>
+    <string name="config_font_small">Small</string>
+    <string name="config_font_normal">Normal</string>
+    <string name="config_font_large">Large</string>
+    <string name="config_language_label">Application language:</string>
+    <string name="config_language_spanish">Español</string>
+    <string name="config_language_english">English</string>
+    <string name="config_saved">Settings saved</string>
+    <string name="btn_back_config">BACK</string>
+    <string name="btn_save_config">SAVE</string>
+    
+
+    
+    <!-- CalendarioActivity -->
+    <string name="btn_back_calendar">BACK</string>
+</resources>

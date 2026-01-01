@@ -33,8 +33,14 @@ public class BaseActivity extends AppCompatActivity {
     private Context aplicarTamanoLetra(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
         float escala = ConfiguracionActivity.obtenerTamanoLetra(prefs);
+        String idioma = prefs.getString("idioma", "es");
+        
+        // Configurar idioma
+        java.util.Locale locale = new java.util.Locale(idioma);
+        java.util.Locale.setDefault(locale);
         
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(locale);
         configuration.fontScale = escala;
         
         return context.createConfigurationContext(configuration);
