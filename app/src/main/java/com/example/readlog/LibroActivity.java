@@ -1,10 +1,14 @@
 package com.example.readlog;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -15,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LibroActivity extends BaseActivity {
@@ -23,10 +28,12 @@ public class LibroActivity extends BaseActivity {
     private CheckBox cbLeido, cbFavorito;
     private RadioGroup rgEstado;
     private RadioButton rbPendiente, rbEnProgreso, rbLeido;
-    private LinearLayout containerPagActual;
+    private LinearLayout containerPagActual, containerPagTotales;
     private Button btnGuardar, btnVolver, btnEliminar;
-    private TextView tvTitulo;
+    private MaterialToolbar topAppBar;
     private int libroId = -1;
+    // Variable para evitar bucles infinitos entre listeners
+    private boolean isUpdatingProgrammatically = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +53,32 @@ public class LibroActivity extends BaseActivity {
         etPaginaActual = findViewById(R.id.etPaginaActual);
         etPaginasTotales = findViewById(R.id.etPaginasTotales);
         containerPagActual = findViewById(R.id.containerPagActual);
+        containerPagTotales = findViewById(R.id.containerPagTotales);
 
         btnGuardar = findViewById(R.id.libro_guardar);
         btnVolver = findViewById(R.id.btnVolver);
         btnEliminar = findViewById(R.id.btnEliminar);
-        tvTitulo = findViewById(R.id.tvTituloHeader);
+        topAppBar = findViewById(R.id.topAppBar);
 
         // --- LÓGICA VISUAL ---
         // Sincronizar checkbox "Leído" con RadioButton "Leído"
         cbLeido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isUpdatingProgrammatically) return;
+                
+                isUpdatingProgrammatically = true;
                 if (isChecked) {
-                    containerPagActual.setVisibility(View.GONE);
+                    actualizarVisibilidadPaginas(false);
                     rbLeido.setChecked(true);
                 } else {
-                    containerPagActual.setVisibility(View.VISIBLE);
+                    actualizarVisibilidadPaginas(true);
+                    // Si se desmarca leído, volver a pendiente si estaba en leído
+                    if (rbLeido.isChecked()) {
+                        rbPendiente.setChecked(true);
+                    }
                 }
+                isUpdatingProgrammatically = false;
             }
         });
 
@@ -70,13 +86,17 @@ public class LibroActivity extends BaseActivity {
         rgEstado.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (isUpdatingProgrammatically) return;
+                
+                isUpdatingProgrammatically = true;
                 if (checkedId == R.id.rbLeido) {
                     cbLeido.setChecked(true);
-                    containerPagActual.setVisibility(View.GONE);
+                    actualizarVisibilidadPaginas(false);
                 } else {
                     cbLeido.setChecked(false);
-                    containerPagActual.setVisibility(View.VISIBLE);
+                    actualizarVisibilidadPaginas(true);
                 }
+                isUpdatingProgrammatically = false;
             }
         });
 
@@ -98,25 +118,31 @@ public class LibroActivity extends BaseActivity {
             etPaginaActual.setText(String.valueOf(pagActual));
             
             cbFavorito.setChecked(favorito == 1);
+            
+            // Usamos la bandera para inicializar sin disparar lógica circular
+            isUpdatingProgrammatically = true;
             cbLeido.setChecked(leido == 1);
             
             // Seleccionar estado
             if (estado.equals("leido")) {
                 rbLeido.setChecked(true);
+                actualizarVisibilidadPaginas(false);
             } else if (estado.equals("en_progreso")) {
                 rbEnProgreso.setChecked(true);
+                actualizarVisibilidadPaginas(true);
             } else {
                 rbPendiente.setChecked(true);
+                actualizarVisibilidadPaginas(true);
             }
+            isUpdatingProgrammatically = false;
 
-            if(tvTitulo != null) tvTitulo.setText(R.string.title_edit_book);
+            if(topAppBar != null) topAppBar.setTitle(R.string.title_edit_book);
             btnGuardar.setText(R.string.btn_update);
             btnEliminar.setVisibility(View.VISIBLE);
-            
-            Toast.makeText(this, getString(R.string.title_edit_book) + ": " + extras.getString("titulo"), Toast.LENGTH_SHORT).show();
         } else {
             // Modo nuevo libro - seleccionar pendiente por defecto
             rbPendiente.setChecked(true);
+            actualizarVisibilidadPaginas(true);
         }
 
         // --- BOTONES ---
@@ -140,6 +166,35 @@ public class LibroActivity extends BaseActivity {
                 confirmarBorrado();
             }
         });
+    }
+
+    private void actualizarVisibilidadPaginas(boolean mostrarPaginaActual) {
+        if (mostrarPaginaActual) {
+            containerPagActual.setVisibility(View.VISIBLE);
+            
+            // Restaurar márgenes originales (8dp en start)
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) containerPagTotales.getLayoutParams();
+            float density = getResources().getDisplayMetrics().density;
+            params.setMarginStart((int)(8 * density));
+            containerPagTotales.setLayoutParams(params);
+        } else {
+            containerPagActual.setVisibility(View.GONE);
+            
+            // Quitar margen start para que ocupe todo el ancho correctamente
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) containerPagTotales.getLayoutParams();
+            params.setMarginStart(0);
+            containerPagTotales.setLayoutParams(params);
+        }
+    }
+    
+    // --- LÓGICA PARA OCULTAR TECLADO ---
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     private void confirmarBorrado() {
@@ -192,9 +247,39 @@ public class LibroActivity extends BaseActivity {
             pagActual = pagTotales;
         }
 
+        // --- VALIDACIONES DE INTEGRIDAD DE DATOS ---
+        
+        // 1. Validar campos obligatorios
         if (titulo.isEmpty() || autor.isEmpty()) {
             Toast.makeText(this, R.string.msg_fill_required, Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        // 2. Validar que las páginas totales sean mayor a 0
+        if (pagTotales <= 0){
+            etPaginasTotales.setError("Debe ser mayor a 0");
+            Toast.makeText(this, "El número de páginas total debe ser mayor que 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 3. Validar que la página actual no sea mayor que las totales (solo si no es 0)
+        if (pagActual > pagTotales) {
+            etPaginaActual.setError("No puede ser mayor que " + pagTotales);
+            Toast.makeText(this, "La página actual no puede ser mayor que el total", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 4. LÓGICA AUTOMÁTICA: Si pagActual == pagTotales, marcar como LEÍDO automáticamente
+        if (pagActual == pagTotales && !isLeido) {
+            isLeido = true;
+            valorLeido = 1;
+            estado = "leido";
+            // Nota: No actualizamos la UI (checkboxes) porque estamos saliendo de la actividad
+        }
+
+        // 5. LÓGICA AUTOMÁTICA: Si pagActual > 0, marcar como EN PROGRESO automáticamente
+        if (pagActual > 0 && !isLeido){
+            estado = "en_progreso";
         }
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);

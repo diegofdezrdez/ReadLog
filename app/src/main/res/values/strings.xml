@@ -4,7 +4,7 @@
     <!-- MainActivity -->
     <string name="main_title">ReadLog</string>
     <string name="search_hint">Buscar libro o autor…</string>
-    <string name="btn_add_book">+ AÑADIR LIBRO</string>
+    <string name="btn_add_book">AÑADIR LIBRO</string>
     <string name="no_books_found">No se encontraron libros.</string>
     <string name="config_desc">Configuración</string>
     <string name="calendar_desc">Calendario</string>

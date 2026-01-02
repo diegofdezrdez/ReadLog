@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/btnCalendario"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/calendar_desc"
+        android:contentDescription="@string/calendar_desc"
+        app:iconTint="?attr/colorOnSurface"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnEstadisticas"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/stats_desc"
+        android:contentDescription="@string/stats_desc"
+        app:iconTint="?attr/colorOnSurface"
+        app:showAsAction="ifRoom" />
+</menu>

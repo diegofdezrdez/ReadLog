@@ -1,242 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background_secondary"
-    android:padding="24dp">
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/tvTituloHeader"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_add_book"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:gravity="center"
-        android:layout_marginBottom="30dp"/>
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_title"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="4dp"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background_secondary"
+            app:titleCentered="true"
+            app:title="@string/title_add_book"
+            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
-    <EditText
-        android:id="@+id/libro_titulo"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textCapSentences"
-        android:background="@color/input_background"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_author"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="4dp"/>
-
-    <EditText
-        android:id="@+id/libro_autor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:background="@color/input_background"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
-
-    <CheckBox
-        android:id="@+id/cbLeido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cb_read"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="10dp"/>
-
-    <CheckBox
-        android:id="@+id/cbFavorito"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cb_favorite"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_status"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="8dp"/>
-
-    <RadioGroup
-        android:id="@+id/rgEstado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
-
-        <RadioButton
-            android:id="@+id/rbPendiente"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/rb_pending"
-            android:textSize="14sp" />
-
-        <RadioButton
-            android:id="@+id/rbEnProgreso"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/rb_in_progress"
-            android:textSize="14sp" />
-
-        <RadioButton
-            android:id="@+id/rbLeido"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/rb_read"
-            android:textSize="14sp" />
-    </RadioGroup>
-
-    <LinearLayout
-        android:id="@+id/layoutPaginas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:baselineAligned="false">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/containerPagActual"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginEnd="8dp">
+            android:padding="24dp">
+
+            <!-- Título -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/label_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/libro_titulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Autor -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/label_author">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/libro_autor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/cbLeido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cb_read"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
+
+            <CheckBox
+                android:id="@+id/cbFavorito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cb_favorite"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_current_page"
+                android:text="@string/label_status"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="8dp"/>
 
-            <EditText
-                android:id="@+id/etPaginaActual"
+            <RadioGroup
+                android:id="@+id/rgEstado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="0"
-                android:background="@color/input_background"
-                android:padding="12dp"/>
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp">
+                <RadioButton
+                    android:id="@+id/rbPendiente"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rb_pending"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_total_pages"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="4dp"/>
+                <RadioButton
+                    android:id="@+id/rbEnProgreso"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rb_in_progress"
+                    android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/etPaginasTotales"
+                <RadioButton
+                    android:id="@+id/rbLeido"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rb_read"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/layoutPaginas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="0"
-                android:background="@color/input_background"
-                android:padding="12dp"/>
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/containerPagActual"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/label_current_page">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPaginaActual"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerPagTotales"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/label_total_pages">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPaginasTotales"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Notas -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/label_notes">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/libro_descripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnVolver"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:text="@string/btn_back"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginEnd="5dp"/>
+
+                <Button
+                    android:id="@+id/btnEliminar"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:text="@string/btn_delete"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/button_delete"
+                    android:visibility="gone"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"/>
+
+                <Button
+                    android:id="@+id/libro_guardar"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:text="@string/btn_save"
+                    android:textColor="@color/surface_color"
+                    android:backgroundTint="@color/button_primary"
+                    android:layout_marginStart="5dp"/>
+
+            </LinearLayout>
+            
+            <!-- Espacio extra al final para evitar que el teclado o barras tapen contenido -->
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_notes"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="4dp"/>
-
-    <EditText
-        android:id="@+id/libro_descripcion"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:hint="@string/hint_notes"
-        android:gravity="top|start"
-        android:inputType="textMultiLine"
-        android:background="@color/input_background"
-        android:padding="12dp"
-        android:layout_marginBottom="20dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/btnVolver"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/btn_back"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_secondary"
-            android:layout_marginEnd="5dp"/>
-
-        <Button
-            android:id="@+id/btnEliminar"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/btn_delete"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_delete"
-            android:visibility="gone"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"/>
-
-        <Button
-            android:id="@+id/libro_guardar"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/btn_save"
-            android:textColor="@color/surface_color"
-            android:textStyle="bold"
-            android:backgroundTint="@color/button_primary"
-            android:layout_marginStart="5dp"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
