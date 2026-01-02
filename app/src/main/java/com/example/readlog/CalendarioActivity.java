@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.elevation.SurfaceColors;
 
@@ -37,7 +39,7 @@ public class CalendarioActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendario);
         
-        // Aplicar color de superficie para status bar (Corregido)
+        // Aplicar color de superficie para status bar
         int colorSurface = SurfaceColors.SURFACE_2.getColor(this);
         getWindow().setStatusBarColor(colorSurface);
 
@@ -117,7 +119,9 @@ public class CalendarioActivity extends BaseActivity {
             TextView tv = new TextView(this);
             tv.setText(dia);
             tv.setGravity(Gravity.CENTER);
-            tv.setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_LabelSmall);
+            // Usar TextViewCompat para evitar problemas de deprecación
+            TextViewCompat.setTextAppearance(tv, com.google.android.material.R.style.TextAppearance_Material3_LabelSmall);
+            
             // Usar atributo de color para tema claro/oscuro
             tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
             
@@ -151,22 +155,27 @@ public class CalendarioActivity extends BaseActivity {
             cal.set(Calendar.DAY_OF_MONTH, dia);
             String fechaStr = sdfDia.format(cal.getTime());
 
+            // Crear contenedor para centrar y asegurar aspecto cuadrado
+            FrameLayout container = new FrameLayout(this);
+            GridLayout.LayoutParams containerParams = new GridLayout.LayoutParams();
+            containerParams.width = 0; // Usar peso para distribuir ancho
+            containerParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            containerParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            containerParams.setMargins(4, 4, 4, 4); // Margen entre celdas
+            container.setLayoutParams(containerParams);
+
             TextView tv = new TextView(this);
             tv.setText(String.valueOf(dia));
             tv.setGravity(Gravity.CENTER);
-            tv.setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
+            // Usar TextViewCompat para evitar problemas de deprecación
+            TextViewCompat.setTextAppearance(tv, com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
             
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = GridLayout.LayoutParams.WRAP_CONTENT; // O un tamaño fijo para que sean cuadrados
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-            params.setMargins(8, 8, 8, 8); // Margen entre celdas
-            tv.setLayoutParams(params);
+            // Tamaño fijo para asegurar que sea cuadrado (círculo perfecto)
+            int size = (int) (40 * getResources().getDisplayMetrics().density);
+            FrameLayout.LayoutParams tvParams = new FrameLayout.LayoutParams(size, size);
+            tvParams.gravity = Gravity.CENTER;
+            tv.setLayoutParams(tvParams);
             
-            // Padding interno para el círculo de fondo
-            int padding = 20; // Ajustar según densidad
-            tv.setPadding(padding, padding, padding, padding);
-
             if (diasConActividad.contains(fechaStr)) {
                 // Usar drawable circular para el fondo
                 tv.setBackgroundResource(R.drawable.circle_background_primary);
@@ -180,7 +189,8 @@ public class CalendarioActivity extends BaseActivity {
                 tv.setTypeface(null, Typeface.NORMAL);
             }
 
-            gridCalendario.addView(tv);
+            container.addView(tv);
+            gridCalendario.addView(container);
         }
     }
 }
