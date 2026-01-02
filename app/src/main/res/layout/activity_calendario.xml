@@ -85,7 +85,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="16dp"/>
-            android:layout_height="60dp"
-            android:text="@string/btn_back_calendar"
+        
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
