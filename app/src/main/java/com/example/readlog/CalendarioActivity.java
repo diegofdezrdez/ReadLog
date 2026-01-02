@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.elevation.SurfaceColors;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,6 +28,7 @@ public class CalendarioActivity extends BaseActivity {
     private TextView tvMesAno;
     private ImageButton btnAnterior, btnSiguiente;
     private MaterialToolbar topAppBar;
+    private Button btnVolver;
     private Calendar calendarioActual;
     private Set<String> diasConActividad;
 
@@ -32,12 +36,17 @@ public class CalendarioActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendario);
+        
+        // Aplicar color de superficie para status bar (Corregido)
+        int colorSurface = SurfaceColors.SURFACE_2.getColor(this);
+        getWindow().setStatusBarColor(colorSurface);
 
         gridCalendario = findViewById(R.id.gridCalendario);
         tvMesAno = findViewById(R.id.tvMesAno);
         btnAnterior = findViewById(R.id.btnMesAnterior);
         btnSiguiente = findViewById(R.id.btnMesSiguiente);
         topAppBar = findViewById(R.id.topAppBar);
+        btnVolver = findViewById(R.id.btnVolverCalendario);
 
         calendarioActual = Calendar.getInstance();
         diasConActividad = new HashSet<>();
@@ -55,11 +64,11 @@ public class CalendarioActivity extends BaseActivity {
             actualizarCalendario();
         });
 
-        // Listener para el botón de cerrar/volver de la barra de herramientas
-        topAppBar.setNavigationOnClickListener(v -> finish());
+        // Eliminar el icono de navegación (X)
+        topAppBar.setNavigationIcon(null);
         
-        // El botón "Volver" de abajo ha sido eliminado de la lógica,
-        // ya que ahora la navegación se gestiona desde la barra superior.
+        // Listener para el botón volver
+        btnVolver.setOnClickListener(v -> finish());
     }
 
     private void cargarDiasConActividad() {
@@ -89,7 +98,10 @@ public class CalendarioActivity extends BaseActivity {
         gridCalendario.removeAllViews();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        tvMesAno.setText(sdf.format(calendarioActual.getTime()));
+        String mesAno = sdf.format(calendarioActual.getTime());
+        // Capitalizar primera letra
+        mesAno = mesAno.substring(0, 1).toUpperCase() + mesAno.substring(1);
+        tvMesAno.setText(mesAno);
 
         Calendar cal = (Calendar) calendarioActual.clone();
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -106,8 +118,17 @@ public class CalendarioActivity extends BaseActivity {
             tv.setText(dia);
             tv.setGravity(Gravity.CENTER);
             tv.setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_LabelSmall);
+            // Usar atributo de color para tema claro/oscuro
             tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
-            tv.setPadding(8, 8, 8, 8);
+            
+            // Usar parámetros de diseño para el grid
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            params.setMargins(4, 4, 4, 4);
+            tv.setLayoutParams(params);
+            
             gridCalendario.addView(tv);
         }
 
@@ -116,6 +137,13 @@ public class CalendarioActivity extends BaseActivity {
         for (int i = 0; i < primerDiaSemana; i++) {
             TextView tv = new TextView(this);
             tv.setText("");
+            
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            tv.setLayoutParams(params);
+            
             gridCalendario.addView(tv);
         }
 
@@ -127,14 +155,29 @@ public class CalendarioActivity extends BaseActivity {
             tv.setText(String.valueOf(dia));
             tv.setGravity(Gravity.CENTER);
             tv.setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
-            tv.setPadding(16, 16, 16, 16);
+            
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT; // O un tamaño fijo para que sean cuadrados
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            params.setMargins(8, 8, 8, 8); // Margen entre celdas
+            tv.setLayoutParams(params);
+            
+            // Padding interno para el círculo de fondo
+            int padding = 20; // Ajustar según densidad
+            tv.setPadding(padding, padding, padding, padding);
 
             if (diasConActividad.contains(fechaStr)) {
-                tv.setBackgroundColor(ContextCompat.getColor(this, com.google.android.material.R.color.material_dynamic_primary40));
-                tv.setTextColor(ContextCompat.getColor(this, com.google.android.material.R.color.material_dynamic_primary90));
+                // Usar drawable circular para el fondo
+                tv.setBackgroundResource(R.drawable.circle_background_primary);
+                // Texto blanco o color que contraste
+                tv.setTextColor(ContextCompat.getColor(this, R.color.white));
                 tv.setTypeface(null, Typeface.BOLD);
             } else {
+                tv.setBackground(null);
+                // Color de texto normal según tema
                 tv.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+                tv.setTypeface(null, Typeface.NORMAL);
             }
 
             gridCalendario.addView(tv);

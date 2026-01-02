@@ -55,17 +55,19 @@
     <string name="stats_pages_read">Páginas Leídas (Total)</string>
     
     <!-- CalendarioActivity -->
-    <string name="calendar_title">Calendario de Actividad</string>
-    <string name="calendar_description">Los días en verde indican actividad (libros guardados o actualizados)</string>
+    <string name="calendar_title">Calendario</string>
+    <string name="calendar_description">Los días en verde indican actividad.</string>
+    <string name="btn_prev_month">Mes anterior</string>
+    <string name="btn_next_month">Mes siguiente</string>
     
     <!-- Días de la semana -->
-    <string name="day_sun">Dom</string>
-    <string name="day_mon">Lun</string>
-    <string name="day_tue">Mar</string>
-    <string name="day_wed">Mié</string>
-    <string name="day_thu">Jue</string>
-    <string name="day_fri">Vie</string>
-    <string name="day_sat">Sáb</string>
+    <string name="day_sun">D</string>
+    <string name="day_mon">L</string>
+    <string name="day_tue">M</string>
+    <string name="day_wed">X</string>
+    <string name="day_thu">J</string>
+    <string name="day_fri">V</string>
+    <string name="day_sat">S</string>
     
     <!-- ConfiguracionActivity -->
     <string name="config_title">Configuración</string>

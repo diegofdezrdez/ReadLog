@@ -195,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="@string/btn_back_stats"
-                android:textColor="@color/text_primary"/>
+                android:textColor="?attr/colorAccent"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
