@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class ConfiguracionActivity extends BaseActivity {
 
@@ -18,7 +19,8 @@ public class ConfiguracionActivity extends BaseActivity {
     private RadioButton rbTemaClaro, rbTemaOscuro, rbTemaAuto;
     private Spinner spTamanoLetra;
     private Spinner spIdioma;
-    private Button btnGuardar, btnVolver;
+    private Button btnGuardar;
+    private MaterialToolbar topAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class ConfiguracionActivity extends BaseActivity {
         spTamanoLetra = findViewById(R.id.spTamanoLetra);
         spIdioma = findViewById(R.id.spIdioma);
         btnGuardar = findViewById(R.id.btnGuardarConfig);
-        btnVolver = findViewById(R.id.btnVolverConfig);
+        topAppBar = findViewById(R.id.topAppBar);
 
         // Configurar spinner de tamaño de letra
         String[] tamanos = {getString(R.string.config_font_small), getString(R.string.config_font_normal), getString(R.string.config_font_large)};
@@ -60,8 +62,8 @@ public class ConfiguracionActivity extends BaseActivity {
             }
         });
 
-        // Botón volver
-        btnVolver.setOnClickListener(new View.OnClickListener() {
+        // Icono de navegación
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

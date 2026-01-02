@@ -20,7 +20,8 @@
             app:titleCentered="true"
             app:title="@string/config_title"
             app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"/>
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            app:navigationIcon="@drawable/ic_arrow_back"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -140,35 +141,15 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Botones -->
-            <LinearLayout
+            <Button
+                android:id="@+id/btnGuardarConfig"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/btnVolverConfig"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="@string/btn_back_config"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="8dp"/>
-
-                <Button
-                    android:id="@+id/btnGuardarConfig"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="@string/btn_save_config"
-                    android:textColor="@color/surface_color"
-                    android:textStyle="bold"
-                    android:backgroundTint="@color/button_primary"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
+                android:layout_height="60dp"
+                android:text="@string/btn_save_config"
+                android:textColor="@color/surface_color"
+                android:textStyle="bold"
+                android:backgroundTint="@color/button_primary"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -2,8 +2,8 @@ package com.example.readlog;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class EstadisticasActivity extends BaseActivity {
 
@@ -16,7 +16,7 @@ public class EstadisticasActivity extends BaseActivity {
         TextView tvLeidos = findViewById(R.id.tvTotalLeidos);
         TextView tvPendientes = findViewById(R.id.tvTotalPendientes);
         TextView tvPaginas = findViewById(R.id.tvPaginasLeidas);
-        Button btnVolver = findViewById(R.id.btnCerrarStats);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
 
         // Llamamos al helper para obtener los datos
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
@@ -33,7 +33,7 @@ public class EstadisticasActivity extends BaseActivity {
         tvPendientes.setText(String.valueOf(pendientes));
         tvPaginas.setText(String.valueOf(totalPaginas));
 
-        btnVolver.setOnClickListener(new View.OnClickListener() {
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

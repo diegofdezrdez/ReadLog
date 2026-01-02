@@ -29,7 +29,7 @@ public class LibroActivity extends BaseActivity {
     private RadioGroup rgEstado;
     private RadioButton rbPendiente, rbEnProgreso, rbLeido;
     private LinearLayout containerPagActual, containerPagTotales;
-    private Button btnGuardar, btnVolver, btnEliminar;
+    private Button btnGuardar, btnEliminar;
     private MaterialToolbar topAppBar;
     private int libroId = -1;
     // Variable para evitar bucles infinitos entre listeners
@@ -56,7 +56,6 @@ public class LibroActivity extends BaseActivity {
         containerPagTotales = findViewById(R.id.containerPagTotales);
 
         btnGuardar = findViewById(R.id.libro_guardar);
-        btnVolver = findViewById(R.id.btnVolver);
         btnEliminar = findViewById(R.id.btnEliminar);
         topAppBar = findViewById(R.id.topAppBar);
 
@@ -153,7 +152,7 @@ public class LibroActivity extends BaseActivity {
             }
         });
 
-        btnVolver.setOnClickListener(new View.OnClickListener() {
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

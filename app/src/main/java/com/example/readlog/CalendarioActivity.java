@@ -30,7 +30,6 @@ public class CalendarioActivity extends BaseActivity {
     private TextView tvMesAno;
     private ImageButton btnAnterior, btnSiguiente;
     private MaterialToolbar topAppBar;
-    private Button btnVolver;
     private Calendar calendarioActual;
     private Set<String> diasConActividad;
 
@@ -48,7 +47,6 @@ public class CalendarioActivity extends BaseActivity {
         btnAnterior = findViewById(R.id.btnMesAnterior);
         btnSiguiente = findViewById(R.id.btnMesSiguiente);
         topAppBar = findViewById(R.id.topAppBar);
-        btnVolver = findViewById(R.id.btnVolverCalendario);
 
         calendarioActual = Calendar.getInstance();
         diasConActividad = new HashSet<>();
@@ -66,11 +64,8 @@ public class CalendarioActivity extends BaseActivity {
             actualizarCalendario();
         });
 
-        // Eliminar el icono de navegación (X)
-        topAppBar.setNavigationIcon(null);
-        
-        // Listener para el botón volver
-        btnVolver.setOnClickListener(v -> finish());
+        // Listener para el icono de navegación
+        topAppBar.setNavigationOnClickListener(v -> finish());
     }
 
     private void cargarDiasConActividad() {

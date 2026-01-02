@@ -20,7 +20,8 @@
             android:background="@color/background_secondary"
             app:titleCentered="true"
             app:title="@string/title_add_book"
-            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:navigationIcon="@drawable/ic_arrow_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -201,16 +202,6 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/btnVolver"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="@string/btn_back"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginEnd="5dp"/>
-
-                <Button
                     android:id="@+id/btnEliminar"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="0dp"
@@ -220,8 +211,7 @@
                     android:textColor="@color/white"
                     android:backgroundTint="@color/button_delete"
                     android:visibility="gone"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginStart="5dp"/>
+                    android:layout_marginEnd="8dp"/>
 
                 <Button
                     android:id="@+id/libro_guardar"
@@ -231,8 +221,7 @@
                     android:layout_weight="1"
                     android:text="@string/btn_save"
                     android:textColor="@color/surface_color"
-                    android:backgroundTint="@color/button_primary"
-                    android:layout_marginStart="5dp"/>
+                    android:backgroundTint="@color/button_primary"/>
 
             </LinearLayout>
             
