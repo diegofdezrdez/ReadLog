@@ -84,46 +84,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_status"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="8dp"/>
-
-            <RadioGroup
-                android:id="@+id/rgEstado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-
-                <RadioButton
-                    android:id="@+id/rbPendiente"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rb_pending"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/rbEnProgreso"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rb_in_progress"
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/rbLeido"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rb_read"
-                    android:textSize="14sp" />
-            </RadioGroup>
+            <!-- RadioGroup REMOVED here -->
 
             <LinearLayout
                 android:id="@+id/layoutPaginas"

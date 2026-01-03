@@ -14,8 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -26,14 +24,10 @@ public class LibroActivity extends BaseActivity {
 
     private EditText etNombre, etAutor, etNotas, etPaginaActual, etPaginasTotales;
     private CheckBox cbLeido, cbFavorito;
-    private RadioGroup rgEstado;
-    private RadioButton rbPendiente, rbEnProgreso, rbLeido;
     private LinearLayout containerPagActual, containerPagTotales;
     private Button btnGuardar, btnEliminar;
     private MaterialToolbar topAppBar;
     private int libroId = -1;
-    // Variable para evitar bucles infinitos entre listeners
-    private boolean isUpdatingProgrammatically = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +40,6 @@ public class LibroActivity extends BaseActivity {
         etNotas = findViewById(R.id.libro_descripcion);
         cbLeido = findViewById(R.id.cbLeido);
         cbFavorito = findViewById(R.id.cbFavorito);
-        rgEstado = findViewById(R.id.rgEstado);
-        rbPendiente = findViewById(R.id.rbPendiente);
-        rbEnProgreso = findViewById(R.id.rbEnProgreso);
-        rbLeido = findViewById(R.id.rbLeido);
         etPaginaActual = findViewById(R.id.etPaginaActual);
         etPaginasTotales = findViewById(R.id.etPaginasTotales);
         containerPagActual = findViewById(R.id.containerPagActual);
@@ -60,42 +50,15 @@ public class LibroActivity extends BaseActivity {
         topAppBar = findViewById(R.id.topAppBar);
 
         // --- LÓGICA VISUAL ---
-        // Sincronizar checkbox "Leído" con RadioButton "Leído"
+        // Sincronizar checkbox "Leído" con visibilidad
         cbLeido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isUpdatingProgrammatically) return;
-                
-                isUpdatingProgrammatically = true;
                 if (isChecked) {
                     actualizarVisibilidadPaginas(false);
-                    rbLeido.setChecked(true);
                 } else {
                     actualizarVisibilidadPaginas(true);
-                    // Si se desmarca leído, volver a pendiente si estaba en leído
-                    if (rbLeido.isChecked()) {
-                        rbPendiente.setChecked(true);
-                    }
                 }
-                isUpdatingProgrammatically = false;
-            }
-        });
-
-        // Sincronizar RadioGroup con checkbox "Leído"
-        rgEstado.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (isUpdatingProgrammatically) return;
-                
-                isUpdatingProgrammatically = true;
-                if (checkedId == R.id.rbLeido) {
-                    cbLeido.setChecked(true);
-                    actualizarVisibilidadPaginas(false);
-                } else {
-                    cbLeido.setChecked(false);
-                    actualizarVisibilidadPaginas(true);
-                }
-                isUpdatingProgrammatically = false;
             }
         });
 
@@ -109,7 +72,6 @@ public class LibroActivity extends BaseActivity {
 
             int leido = extras.getInt("leido", 0);
             int favorito = extras.getInt("favorito", 0);
-            String estado = extras.getString("estado", "pendiente");
             int pagActual = extras.getInt("pag_actual", 0);
             int pagTotales = extras.getInt("pag_totales", 0);
 
@@ -117,30 +79,19 @@ public class LibroActivity extends BaseActivity {
             etPaginaActual.setText(String.valueOf(pagActual));
             
             cbFavorito.setChecked(favorito == 1);
-            
-            // Usamos la bandera para inicializar sin disparar lógica circular
-            isUpdatingProgrammatically = true;
             cbLeido.setChecked(leido == 1);
             
-            // Seleccionar estado
-            if (estado.equals("leido")) {
-                rbLeido.setChecked(true);
+            if (leido == 1) {
                 actualizarVisibilidadPaginas(false);
-            } else if (estado.equals("en_progreso")) {
-                rbEnProgreso.setChecked(true);
-                actualizarVisibilidadPaginas(true);
             } else {
-                rbPendiente.setChecked(true);
                 actualizarVisibilidadPaginas(true);
             }
-            isUpdatingProgrammatically = false;
 
             if(topAppBar != null) topAppBar.setTitle(R.string.title_edit_book);
             btnGuardar.setText(R.string.btn_update);
             btnEliminar.setVisibility(View.VISIBLE);
         } else {
-            // Modo nuevo libro - seleccionar pendiente por defecto
-            rbPendiente.setChecked(true);
+            // Modo nuevo libro
             actualizarVisibilidadPaginas(true);
         }
 
@@ -221,14 +172,6 @@ public class LibroActivity extends BaseActivity {
         int valorLeido = isLeido ? 1 : 0;
         int valorFavorito = cbFavorito.isChecked() ? 1 : 0;
 
-        // Determinar estado
-        String estado = "pendiente";
-        if (rbLeido.isChecked()) {
-            estado = "leido";
-        } else if (rbEnProgreso.isChecked()) {
-            estado = "en_progreso";
-        }
-
         int pagActual = 0;
         int pagTotales = 0;
 
@@ -268,17 +211,16 @@ public class LibroActivity extends BaseActivity {
             return;
         }
 
-        // 4. LÓGICA AUTOMÁTICA: Si pagActual == pagTotales, marcar como LEÍDO automáticamente
-        if (pagActual == pagTotales && !isLeido) {
-            isLeido = true;
-            valorLeido = 1;
-            estado = "leido";
-            // Nota: No actualizamos la UI (checkboxes) porque estamos saliendo de la actividad
-        }
-
-        // 5. LÓGICA AUTOMÁTICA: Si pagActual > 0, marcar como EN PROGRESO automáticamente
-        if (pagActual > 0 && !isLeido){
+        // LÓGICA PARA DEFINIR EL ESTADO
+        String estado;
+        if (pagActual == 0) {
+            estado = "pendiente";
+        } else if (pagActual < pagTotales) {
             estado = "en_progreso";
+        } else {
+            estado = "leido";
+            // Si el usuario llega al final, marcamos leído automáticamente
+            valorLeido = 1;
         }
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
