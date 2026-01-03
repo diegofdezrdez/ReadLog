@@ -33,6 +33,30 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
+
+        // 2. Poblar la base de datos
+        long now = System.currentTimeMillis();
+
+        // Un mundo feliz: Leído, Favorito
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('Un mundo feliz', 'Aldous Huxley', 'Lectura obligatoria', 1, 256, 256, 1, 'leido', " + now + ")");
+
+        // Rebelión en la granja: Leído
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('Rebelión en la granja', 'George Orwell', 'Sátira', 1, 144, 144, 0, 'leido', " + now + ")");
+
+        // La divina comedia: Pendiente
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('La divina comedia', 'Dante Alighieri', 'Clásico', 0, 0, 720, 0, 'pendiente', " + now + ")");
+
+        // Rayuela: En progreso, Favorito
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('Rayuela', 'Julio Cortázar', 'Contra-novela', 0, 300, 600, 1, 'en_progreso', " + now + ")");
+
+        // El camino de los reyes: En progreso
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('El camino de los reyes', 'Brandon Sanderson', 'Fantasía épica', 0, 120, 1200, 0, 'en_progreso', " + now + ")");
+
+        // 1984: Pendiente
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('1984', 'George Orwell', 'Distopía', 0, 0, 328, 0, 'pendiente', " + now + ")");
+
+        // El principito: Leído
+        db.execSQL("INSERT INTO libros (titulo, autor, notas, leido, pagina_actual, paginas_totales, favorito, estado, fecha_actualizacion) VALUES ('El principito', 'Antoine de Saint-Exupéry', 'Filosofía', 1, 96, 96, 0, 'leido', " + now + ")");
     }
 
     @Override

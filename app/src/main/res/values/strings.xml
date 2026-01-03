@@ -24,7 +24,7 @@
     <string name="cb_read">Leído</string>
     <string name="cb_favorite">⭐ Favorito</string>
     <string name="rb_pending">Pendiente</string>
-    <string name="rb_in_progress">En Progreso</string>
+    <string name="rb_in_progress">En progreso</string>
     <string name="rb_read">Leído</string>
     <string name="btn_save">GUARDAR</string>
     <string name="btn_update">ACTUALIZAR</string>
@@ -42,7 +42,7 @@
     <string name="dialog_cancel">CANCELAR</string>
     
     <!-- Estados del libro -->
-    <string name="status_read">LEÍDO</string>
+    <string name="status_read">Leído</string>
     <string name="status_in_progress">En Progreso (%1$d%%)</string>
     <string name="status_pending">Pendiente</string>
     

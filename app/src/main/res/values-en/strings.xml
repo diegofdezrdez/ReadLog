@@ -43,8 +43,8 @@
     <string name="dialog_cancel">CANCEL</string>
     
     <!-- Estados del libro -->
-    <string name="status_read">READ</string>
-    <string name="status_in_progress">In Progress (%1$d%%)</string>
+    <string name="status_read">Read</string>
+    <string name="status_in_progress">In progress (%1$d%%)</string>
     <string name="status_pending">Pending</string>
     <string name="status_page">Page %1$d (%2$d%%)</string>
 
