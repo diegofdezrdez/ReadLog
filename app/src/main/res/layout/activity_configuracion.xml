@@ -10,7 +10,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="?attr/colorSurface"
+        android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -19,8 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             app:titleCentered="true"
             app:title="@string/config_title"
-            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:navigationIcon="@drawable/ic_arrow_back"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -34,17 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="16dp">
 
             <!-- Tema -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/surface_color"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp">
+                android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,8 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/config_theme_label"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp"/>
 
                     <RadioGroup
@@ -70,37 +66,31 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/config_theme_light"
-                            android:textSize="16sp"
-                            android:padding="8dp"/>
+                            android:paddingStart="8dp"/>
 
                         <RadioButton
                             android:id="@+id/rbTemaOscuro"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/config_theme_dark"
-                            android:textSize="16sp"
-                            android:padding="8dp"/>
+                            android:paddingStart="8dp"/>
 
                         <RadioButton
                             android:id="@+id/rbTemaAuto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/config_theme_auto"
-                            android:textSize="16sp"
-                            android:padding="8dp"/>
+                            android:paddingStart="8dp"/>
                     </RadioGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Configuración Letra e Idioma -->
             <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                app:cardBackgroundColor="@color/surface_color"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp">
+                android:layout_marginBottom="32dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,8 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/config_font_size_label"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp"/>
 
                     <Spinner
@@ -129,8 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/config_language_label"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:layout_marginBottom="12dp"/>
 
                     <Spinner
@@ -143,13 +131,10 @@
 
             <Button
                 android:id="@+id/btnGuardarConfig"
-                style="@style/Widget.MaterialComponents.Button"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="@string/btn_save_config"
-                android:textColor="@color/surface_color"
-                android:textStyle="bold"
-                android:backgroundTint="@color/button_primary"/>
+                android:text="@string/btn_save_config"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/btnCalendario"
-        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:icon="@drawable/ic_calendar_month"
         android:title="@string/calendar_desc"
         android:contentDescription="@string/calendar_desc"
-        app:iconTint="?attr/colorOnSurface"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/btnEstadisticas"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/ic_bar_chart"
         android:title="@string/stats_desc"
         android:contentDescription="@string/stats_desc"
-        app:iconTint="?attr/colorOnSurface"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnCuenta"
+        android:icon="@drawable/ic_account_circle"
+        android:title="@string/account_desc"
+        android:contentDescription="@string/account_desc"
         app:showAsAction="ifRoom" />
 </menu>

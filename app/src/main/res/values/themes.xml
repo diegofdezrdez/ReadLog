@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ReadLog" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Tell the system to use dark icons on a light status bar -->
-        <item name="android:windowLightStatusBar">true</item>
+        <!-- Configuración para Edge-to-Edge -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
 
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Opcional: Asegura que los iconos de la barra de estado sean oscuros en modo día -->
+        <!-- <item name="android:windowLightStatusBar">true</item> -->
     </style>
 
     <style name="Theme.ReadLog" parent="Base.Theme.ReadLog" />

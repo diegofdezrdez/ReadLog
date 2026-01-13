@@ -10,6 +10,8 @@
     <string name="config_desc">Settings</string>
     <string name="calendar_desc">Calendar</string>
     <string name="stats_desc">Statistics</string>
+    <string name="header_read_books">Read</string>
+    <string name="account_desc">Que pongo aquí</string>
     
     <!-- LibroActivity -->
     <string name="title_add_book">Add New Book</string>
@@ -31,6 +33,7 @@
     <string name="btn_update">UPDATE</string>
     <string name="btn_delete">DELETE</string>
     <string name="btn_back">BACK</string>
+    <string name="fecha_de_finalizacion_opcional">End date (optional)</string>
     
     <!-- Mensajes LibroActivity -->
     <string name="msg_book_saved">Book saved</string>

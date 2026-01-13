@@ -1,24 +1,30 @@
 package com.example.readlog;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
+
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
 
 public class LibroActivity extends BaseActivity {
 
@@ -27,14 +33,114 @@ public class LibroActivity extends BaseActivity {
     private LinearLayout containerPagActual, containerPagTotales;
     private Button btnGuardar, btnEliminar;
     private MaterialToolbar topAppBar;
-    private int libroId = -1;
+    private TextInputLayout layoutFechaLectura;
+    private TextInputEditText etFechaLectura;
+
+    private BookRepository bookRepository;
+    private String libroId = null;
+    private boolean isEditMode = false;
+    private long fechaSeleccionada = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_libro);
 
-        // --- VINCULACIÓN ---
+        bookRepository = new BookRepository(this);
+
+        bindViews();
+        setupListeners();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getString("id") != null) {
+            isEditMode = true;
+            libroId = extras.getString("id");
+            populateFields(extras);
+        } else {
+            isEditMode = false;
+            actualizarVisibilidadPaginas(true);
+            layoutFechaLectura.setVisibility(View.GONE);
+        }
+    }
+
+    private void guardarCambios() {
+        String titulo = etNombre.getText().toString();
+        String autor = etAutor.getText().toString();
+
+        if (titulo.isEmpty() || autor.isEmpty()) {
+            Toast.makeText(this, R.string.msg_fill_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String idParaGuardar = (libroId == null) ? UUID.randomUUID().toString() : libroId;
+        String notas = etNotas.getText().toString();
+        boolean isLeido = cbLeido.isChecked();
+        int pagTotales = 0;
+        String pagTotalesStr = etPaginasTotales.getText().toString();
+        if (!pagTotalesStr.isEmpty()) pagTotales = Integer.parseInt(pagTotalesStr);
+        if (pagTotales <= 0) {
+            etPaginasTotales.setError("Debe ser mayor a 0");
+            Toast.makeText(this, "El número de páginas total debe ser mayor que 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int pagActual = 0;
+        if (!isLeido) {
+            String pagActualStr = etPaginaActual.getText().toString();
+            if (!pagActualStr.isEmpty()) pagActual = Integer.parseInt(pagActualStr);
+        } else {
+            pagActual = pagTotales;
+        }
+        if (pagActual > pagTotales) {
+            etPaginaActual.setError("No puede ser mayor que " + pagTotales);
+            Toast.makeText(this, "La página actual no puede ser mayor que el total", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String estado = (pagActual == 0) ? "pendiente" : (pagActual < pagTotales) ? "en_progreso" : "leido";
+
+        long fechaDeFinalizacion = 0;
+        if (isLeido) {
+            // Si ya teníamos una fecha (modo edición), se respeta. Si no (o es libro nuevo), se pone la actual.
+            fechaDeFinalizacion = (fechaSeleccionada != 0) ? fechaSeleccionada : System.currentTimeMillis();
+        }
+
+        Libro libro = new Libro(
+                idParaGuardar,
+                titulo,
+                autor,
+                notas,
+                isLeido ? 1 : 0,
+                pagActual,
+                pagTotales,
+                cbFavorito.isChecked() ? 1 : 0,
+                estado,
+                fechaDeFinalizacion
+        );
+
+        bookRepository.saveBook(libro);
+
+        Snackbar.make(findViewById(android.R.id.content),
+            (libroId == null) ? R.string.msg_book_saved : R.string.msg_book_updated,
+            Snackbar.LENGTH_LONG).show();
+
+        finish();
+    }
+
+    private void confirmarBorrado() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_delete_title)
+                .setMessage(R.string.dialog_delete_message)
+                .setPositiveButton(R.string.dialog_yes_delete, (dialog, which) -> {
+                    if (libroId != null) {
+                        bookRepository.deleteBook(libroId);
+                        Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_deleted, Snackbar.LENGTH_LONG).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show();
+    }
+
+    private void bindViews() {
         etNombre = findViewById(R.id.libro_titulo);
         etAutor = findViewById(R.id.libro_autor);
         etNotas = findViewById(R.id.libro_descripcion);
@@ -44,100 +150,91 @@ public class LibroActivity extends BaseActivity {
         etPaginasTotales = findViewById(R.id.etPaginasTotales);
         containerPagActual = findViewById(R.id.containerPagActual);
         containerPagTotales = findViewById(R.id.containerPagTotales);
-
         btnGuardar = findViewById(R.id.libro_guardar);
         btnEliminar = findViewById(R.id.btnEliminar);
         topAppBar = findViewById(R.id.topAppBar);
+        layoutFechaLectura = findViewById(R.id.layoutFechaLectura);
+        etFechaLectura = findViewById(R.id.etFechaLectura);
+    }
 
-        // --- LÓGICA VISUAL ---
-        // Sincronizar checkbox "Leído" con visibilidad
-        cbLeido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    actualizarVisibilidadPaginas(false);
-                } else {
-                    actualizarVisibilidadPaginas(true);
-                }
-            }
-        });
+    private void setupListeners() {
+        btnGuardar.setOnClickListener(v -> guardarCambios());
+        topAppBar.setNavigationOnClickListener(v -> finish());
+        btnEliminar.setOnClickListener(v -> confirmarBorrado());
+        setupDatePicker();
 
-        // --- MODO EDICIÓN ---
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            libroId = extras.getInt("id");
-            etNombre.setText(extras.getString("titulo"));
-            etAutor.setText(extras.getString("autor"));
-            etNotas.setText(extras.getString("notas"));
+        cbLeido.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            actualizarVisibilidadPaginas(!isChecked);
 
-            int leido = extras.getInt("leido", 0);
-            int favorito = extras.getInt("favorito", 0);
-            int pagActual = extras.getInt("pag_actual", 0);
-            int pagTotales = extras.getInt("pag_totales", 0);
+            // La lógica de visibilidad de la fecha solo se aplica en modo CREACIÓN.
+            if (isEditMode) return;
 
-            etPaginasTotales.setText(String.valueOf(pagTotales));
-            etPaginaActual.setText(String.valueOf(pagActual));
-            
-            cbFavorito.setChecked(favorito == 1);
-            cbLeido.setChecked(leido == 1);
-            
-            if (leido == 1) {
-                actualizarVisibilidadPaginas(false);
+            if (isChecked) {
+                layoutFechaLectura.setAlpha(0f);
+                layoutFechaLectura.setVisibility(View.VISIBLE);
+                layoutFechaLectura.animate().alpha(1f).setDuration(300).start();
             } else {
-                actualizarVisibilidadPaginas(true);
+                layoutFechaLectura.animate().alpha(0f).setDuration(300).withEndAction(() -> {
+                    layoutFechaLectura.setVisibility(View.GONE);
+                    etFechaLectura.setText("");
+                    fechaSeleccionada = 0;
+                }).start();
             }
+        });
+    }
 
-            if(topAppBar != null) topAppBar.setTitle(R.string.title_edit_book);
-            btnGuardar.setText(R.string.btn_update);
-            btnEliminar.setVisibility(View.VISIBLE);
-        } else {
-            // Modo nuevo libro
-            actualizarVisibilidadPaginas(true);
+    private void setupDatePicker() {
+        etFechaLectura.setOnClickListener(v -> {
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Seleccionar fecha")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build();
+
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                fechaSeleccionada = selection;
+                TimeZone timeZoneUTC = TimeZone.getDefault();
+                long offset = timeZoneUTC.getOffset(selection);
+                Date date = new Date(selection + offset);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                etFechaLectura.setText(sdf.format(date));
+            });
+
+            datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+        });
+    }
+
+    private void populateFields(Bundle extras) {
+        etNombre.setText(extras.getString("titulo"));
+        etAutor.setText(extras.getString("autor"));
+        etNotas.setText(extras.getString("notas"));
+        etPaginasTotales.setText(String.valueOf(extras.getInt("pag_totales", 0)));
+        etPaginaActual.setText(String.valueOf(extras.getInt("pag_actual", 0)));
+        cbFavorito.setChecked(extras.getInt("favorito", 0) == 1);
+
+        boolean isLeido = extras.getInt("leido", 0) == 1;
+        cbLeido.setChecked(isLeido);
+        actualizarVisibilidadPaginas(!isLeido);
+
+        // **CAMBIO CLAVE**: Guardamos el valor de la fecha pero nos aseguramos
+        // de que el campo nunca sea visible en modo edición.
+        if (isLeido) {
+            fechaSeleccionada = extras.getLong("fecha_actualizacion", 0);
         }
+        layoutFechaLectura.setVisibility(View.GONE);
 
-        // --- BOTONES ---
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                guardarCambios();
-            }
-        });
-
-        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        btnEliminar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmarBorrado();
-            }
-        });
+        if(topAppBar != null) topAppBar.setTitle(R.string.title_edit_book);
+        btnGuardar.setText(R.string.btn_update);
+        btnEliminar.setVisibility(View.VISIBLE);
     }
 
     private void actualizarVisibilidadPaginas(boolean mostrarPaginaActual) {
-        if (mostrarPaginaActual) {
-            containerPagActual.setVisibility(View.VISIBLE);
-            
-            // Restaurar márgenes originales (8dp en start)
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) containerPagTotales.getLayoutParams();
-            float density = getResources().getDisplayMetrics().density;
-            params.setMarginStart((int)(8 * density));
-            containerPagTotales.setLayoutParams(params);
-        } else {
-            containerPagActual.setVisibility(View.GONE);
-            
-            // Quitar margen start para que ocupe todo el ancho correctamente
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) containerPagTotales.getLayoutParams();
-            params.setMarginStart(0);
-            containerPagTotales.setLayoutParams(params);
-        }
+        containerPagActual.setVisibility(mostrarPaginaActual ? View.VISIBLE : View.GONE);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) containerPagTotales.getLayoutParams();
+        float density = getResources().getDisplayMetrics().density;
+        params.setMarginStart(mostrarPaginaActual ? (int) (8 * density) : 0);
+        containerPagTotales.setLayoutParams(params);
     }
-    
-    // --- LÓGICA PARA OCULTAR TECLADO ---
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (getCurrentFocus() != null) {
@@ -145,113 +242,5 @@ public class LibroActivity extends BaseActivity {
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
-    }
-
-    private void confirmarBorrado() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(R.string.dialog_delete_message)
-                .setPositiveButton(R.string.dialog_yes_delete, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(LibroActivity.this);
-                        admin.eliminarLibro(libroId);
-                        Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_deleted, Snackbar.LENGTH_LONG).show();
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .show();
-    }
-
-    private void guardarCambios() {
-        String titulo = etNombre.getText().toString();
-        String autor = etAutor.getText().toString();
-        String notas = etNotas.getText().toString();
-
-        boolean isLeido = cbLeido.isChecked();
-        int valorLeido = isLeido ? 1 : 0;
-        int valorFavorito = cbFavorito.isChecked() ? 1 : 0;
-
-        int pagActual = 0;
-        int pagTotales = 0;
-
-        String pagTotalesStr = etPaginasTotales.getText().toString();
-        if (!pagTotalesStr.isEmpty()) {
-            pagTotales = Integer.parseInt(pagTotalesStr);
-        }
-
-        if (!isLeido) {
-            String pagActualStr = etPaginaActual.getText().toString();
-            if (!pagActualStr.isEmpty()) {
-                pagActual = Integer.parseInt(pagActualStr);
-            }
-        } else {
-            pagActual = pagTotales;
-        }
-
-        // --- VALIDACIONES DE INTEGRIDAD DE DATOS ---
-        
-        // 1. Validar campos obligatorios
-        if (titulo.isEmpty() || autor.isEmpty()) {
-            Toast.makeText(this, R.string.msg_fill_required, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 2. Validar que las páginas totales sean mayor a 0
-        if (pagTotales <= 0){
-            etPaginasTotales.setError("Debe ser mayor a 0");
-            Toast.makeText(this, "El número de páginas total debe ser mayor que 0", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 3. Validar que la página actual no sea mayor que las totales (solo si no es 0)
-        if (pagActual > pagTotales) {
-            etPaginaActual.setError("No puede ser mayor que " + pagTotales);
-            Toast.makeText(this, "La página actual no puede ser mayor que el total", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // LÓGICA PARA DEFINIR EL ESTADO
-        String estado;
-        if (pagActual == 0) {
-            estado = "pendiente";
-        } else if (pagActual < pagTotales) {
-            estado = "en_progreso";
-        } else {
-            estado = "leido";
-            // Si el usuario llega al final, marcamos leído automáticamente
-            valorLeido = 1;
-        }
-
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = admin.getWritableDatabase();
-
-        ContentValues registro = new ContentValues();
-        registro.put("titulo", titulo);
-        registro.put("autor", autor);
-        registro.put("notas", notas);
-        registro.put("leido", valorLeido);
-        registro.put("pagina_actual", pagActual);
-        registro.put("paginas_totales", pagTotales);
-        registro.put("favorito", valorFavorito);
-        registro.put("estado", estado);
-        registro.put("fecha_actualizacion", System.currentTimeMillis());
-
-        if (libroId == -1) {
-            db.insert("libros", null, registro);
-            Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_saved, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.btn_back, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finish();
-                        }
-                    }).show();
-        } else {
-            admin.actualizarLibro(libroId, titulo, autor, notas, valorLeido, pagActual, pagTotales, valorFavorito, estado);
-            Snackbar.make(findViewById(android.R.id.content), R.string.msg_book_updated, Snackbar.LENGTH_LONG).show();
-        }
-
-        db.close();
-        finish();
     }
 }

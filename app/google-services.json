@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "938383005548",
+    "project_id": "readlog-d63b3cdf",
+    "storage_bucket": "readlog-d63b3cdf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938383005548:android:fda92cceca8858ef980549",
+        "android_client_info": {
+          "package_name": "com.example.readlog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938383005548-elul5b66ea1b1l59epdgjc9dam2jigrp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.readlog",
+            "certificate_hash": "e7483aa5531e40e31a99715dd357918bb22e4c09"
+          }
+        },
+        {
+          "client_id": "938383005548-5c2338bbp3a6f60aeik1p2jgl8qgs2ob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxklzGhmMVTqCTV5qcI4PU0V3_RLu85xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938383005548-5c2338bbp3a6f60aeik1p2jgl8qgs2ob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

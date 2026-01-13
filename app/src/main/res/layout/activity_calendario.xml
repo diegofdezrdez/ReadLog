@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="?android:attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
+        android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -20,7 +21,6 @@
             app:titleCentered="true"
             app:title="@string/calendar_title"
             app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:titleTextColor="?attr/colorOnSurface"
             app:navigationIcon="@drawable/ic_arrow_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,13 +48,13 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMesAnterior"
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/btn_prev_month"
-                android:src="@android:drawable/ic_media_previous"/>
+                app:icon="@drawable/ic_chevron_left"/>
 
             <TextView
                 android:id="@+id/tvMesAno"
@@ -65,13 +65,13 @@
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 android:gravity="center"/>
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMesSiguiente"
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/btn_next_month"
-                android:src="@android:drawable/ic_media_next"/>
+                app:icon="@drawable/ic_chevron_right"/>
         </LinearLayout>
 
         <GridLayout

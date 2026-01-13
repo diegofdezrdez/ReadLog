@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">ReadLog</string>
     
+    <!-- Google Sign-In -->
+    <!-- POR FAVOR, REEMPLAZA "YOUR_SERVER_CLIENT_ID" CON TU ID DE CLIENTE WEB DE GOOGLE CLOUD CONSOLE -->
+    <string name="google_server_client_id" translatable="false">938383005548-5c2338bbp3a6f60aeik1p2jgl8qgs2ob.apps.googleusercontent.com</string>
+
     <!-- MainActivity -->
     <string name="main_title">ReadLog</string>
     <string name="search_hint">Buscar libro o autor…</string>
@@ -9,6 +13,8 @@
     <string name="config_desc">Configuración</string>
     <string name="calendar_desc">Calendario</string>
     <string name="stats_desc">Estadísticas</string>
+    <string name="header_read_books">Leídos</string>
+    <string name="account_desc">Cuenta</string>
     
     <!-- LibroActivity -->
     <string name="title_add_book">Añadir Nuevo Libro</string>
@@ -30,6 +36,7 @@
     <string name="btn_update">ACTUALIZAR</string>
     <string name="btn_delete">BORRAR</string>
     <string name="btn_back">VOLVER</string>
+    <string name="fecha_de_finalizacion_opcional">Fecha de finalización (opcional)</string>
     
     <!-- Mensajes LibroActivity -->
     <string name="msg_book_saved">Libro guardado</string>
